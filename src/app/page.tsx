@@ -1,66 +1,126 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import AppBar from '../components/appBar';
+import { Card, CardContent } from '@mui/material';
+import { SpaceBar } from '@mui/icons-material';
 
 export default function Home() {
+  const buttons = [
+    
+    'AC','+/-','%','/',
+    '7', '8', '9','x',
+    '4', '5', '6','-',
+    '1', '2', '3','+'
+  ];
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
+      <AppBar />
+
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: 'calc(100vh - 64px)', // subtract AppBar height
+          pt: 8,
+          px: 2,
+        }}
+      >
+       
+       <Card  sx={{ maxWidth: 360, p:0,boxShadow:6}}>
+        <Box>
+          <Box sx={{bgcolor:'background.default', p:3}}>
+            <Typography sx={{textAlign:'right',fontSize:'10px'}}>1250+45</Typography>
+          <Typography sx={{textAlign:'right',fontSize:'36px'}}>1,295</Typography>
+          </Box>
+           <Grid 
+          container 
+          columns={4} 
+          spacing={0.5}
+          sx={{ maxWidth: 360 , bgcolor: '#e0e0e0',padding:'4px'}}
+        >
+          {buttons.map((num) => (
+            <Grid size={1} key={num}>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{
+                  bgcolor: '#ffffff',
+                  color: num === '+' || num === '-' || num === 'x' || num === '/' ? '#1976d2' : '#000000',
+                  height: 60,
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  boxShadow: 2,
+                  '&:hover': {
+                    bgcolor: '#e0e0e0',
+                  },
+                }}
+              >
+                {num}
+              </Button>
+            </Grid>
+          ))}
+        </Grid> 
+        <Box sx={{display:'flex',flexDirection:'row',bgcolor: '#e0e0e0',gap:0.5,p:0.3}}>
+          <Button
+                variant="contained"
+                sx={{
+                  bgcolor: '#ffffff', 
+                  color: '#000000', 
+                  height: 60,
+                  flex:3,
+                  fontSize: '14px',
+                  boxShadow: 2,
+                  '&:hover': {
+                    bgcolor: '#e0e0e0',
+                  },textAlign:'left',
+                }}
+              >
+                0
+              </Button>
+              <Button
+                variant="contained"
+                
+                sx={{
+                  bgcolor: '#ffffff',
+                  color: '#000000',
+                  height: 60,
+                  flex:1,
+                  fontSize: '14px',
+                  boxShadow: 2,
+                  '&:hover': {
+                    bgcolor: '#e0e0e0',
+                  },
+                }}
+              >
+                .
+              </Button>
+              <Button
+                variant="contained"
+
+                color='primary'
+                sx={{
+                  height: 60,
+                  flex:1,
+                  fontSize: '14px',
+                  boxShadow: 2,
+                  '&:hover': {
+                    bgcolor: '#e0e0e0',
+                  },
+                }}
+              >
+                =
+              </Button>
+        </Box>
+        </Box>
+       </Card>
+      </Box>
+    </Box>
   );
 }
