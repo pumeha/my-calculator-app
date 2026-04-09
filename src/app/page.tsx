@@ -5,8 +5,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import AppBar from '../components/appBar';
-import { Card, CardContent } from '@mui/material';
-import { SpaceBar } from '@mui/icons-material';
+import { Card} from '@mui/material';
 
 export default function Home() {
   const buttons = [
@@ -86,7 +85,6 @@ export default function Home() {
               </Button>
               <Button
                 variant="contained"
-                
                 sx={{
                   bgcolor: '#ffffff',
                   color: '#000000',
@@ -103,7 +101,6 @@ export default function Home() {
               </Button>
               <Button
                 variant="contained"
-
                 color='primary'
                 sx={{
                   height: 60,

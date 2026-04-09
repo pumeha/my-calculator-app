@@ -2,8 +2,8 @@ import ThemeRegistry from './themeRegistry';
 import { ReactNode } from 'react';
 
 export const metadata = {
-  title: 'My App',
-  description: 'Next.js with MUI',
+  title: 'Calculator App',
+  description: 'Simple calculator built with Next.js and Material-UI',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
