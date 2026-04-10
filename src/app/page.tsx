@@ -6,15 +6,63 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import AppBar from '../components/appBar';
 import { Card} from '@mui/material';
+import {useState,useEffect, use} from 'react';
 
 export default function Home() {
+  const [currentNumber,setCurrentNumber] = useState('');
+  const [currentResult,setCurrentResult] = useState('0');
+  const [arithematicMethod,setArithematicMethod] = useState('');
   const buttons = [
     'AC','+/-','%','/',
     '7', '8', '9','x',
     '4', '5', '6','-',
     '1', '2', '3','+'
   ];
+ 
+  useEffect(()=>{
+    if(currentResult === '0'){
+      setCurrentResult(currentNumber);
+      setCurrentNumber('');
+    }else{
+    setCurrentResult(prev=> prev + currentNumber);
+   setCurrentNumber('');
+    }
+ 
+  },[currentNumber]);
 
+  useEffect(()=>{ 
+    if(currentResult === '0' && arithematicMethod !== '.'){
+      setCurrentResult('0');
+    }else if (arithematicMethod === 'AC') {
+      setCurrentResult('0');
+      setArithematicMethod(''); 
+    }else{
+      setCurrentResult(prev=> prev + arithematicMethod); 
+      setArithematicMethod('');
+    }
+    
+   },[arithematicMethod]);
+
+  function calculateResult(){
+    let result = 0;
+    const num1 = parseFloat(currentResult);
+    const num2 = parseFloat(currentNumber);
+    switch (arithematicMethod) {
+      case '+':
+        result = num1 + num2;
+        break;
+      case '-':
+        result = num1 - num2;
+        break;
+      case 'x':
+        result = num1 * num2;
+        break;
+      case '/':
+        result = num1 / num2;
+        break;
+      default:
+        break;
+    }}
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
       <AppBar />
@@ -29,13 +77,13 @@ export default function Home() {
           pt: 8,
           px: 2,
         }}
-      >
+      > 
        
        <Card  sx={{ maxWidth: 360, p:0,boxShadow:6}}>
         <Box>
           <Box sx={{bgcolor:'background.default', p:3}}>
             <Typography sx={{textAlign:'right',fontSize:'10px'}}>1250+45</Typography>
-          <Typography sx={{textAlign:'right',fontSize:'36px'}}>1,295</Typography>
+          <Typography sx={{textAlign:'right',fontSize:'36px'}}>{currentResult}</Typography>
           </Box>
            <Grid 
           container 
@@ -48,6 +96,13 @@ export default function Home() {
               <Button
                 variant="contained"
                 fullWidth
+                onClick={() => {
+                  if (!isNaN(Number(num))) {
+                    setCurrentNumber(num);
+                  } else {
+                    setArithematicMethod(num);
+                  }
+                }}
                 sx={{
                   bgcolor: '#ffffff',
                   color: num === '+' || num === '-' || num === 'x' || num === '/' ? '#1976d2' : '#000000',
@@ -68,6 +123,10 @@ export default function Home() {
         <Box sx={{display:'flex',flexDirection:'row',bgcolor: '#e0e0e0',gap:0.5,p:0.3}}>
           <Button
                 variant="contained"
+                onClick={() => {
+                  setCurrentNumber('0');
+                }}
+
                 sx={{
                   bgcolor: '#ffffff', 
                   color: '#000000', 
@@ -84,6 +143,7 @@ export default function Home() {
               </Button>
               <Button
                 variant="contained"
+                 onClick={()=> setArithematicMethod('.')}
                 sx={{
                   bgcolor: '#ffffff',
                   color: '#000000',
@@ -101,6 +161,7 @@ export default function Home() {
               <Button
                 variant="contained"
                 color='primary'
+                onClick={calculateResult}
                 sx={{
                   height: 60,
                   flex:1,
