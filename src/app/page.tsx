@@ -13,7 +13,7 @@ export default function Home() {
   const [currentResult,setCurrentResult] = useState('0');
   const [arithematicMethod,setArithematicMethod] = useState('');
   const buttons = [
-    'AC','+/-','%','/',
+    'AC','c','%','/',
     '7', '8', '9','x',
     '4', '5', '6','-',
     '1', '2', '3','+'
@@ -36,11 +36,14 @@ export default function Home() {
     }else if (arithematicMethod === 'AC') {
       setCurrentResult('0');
       setArithematicMethod(''); 
+    }else if (arithematicMethod === 'c') {
+      setCurrentResult(pre=> pre.slice(0,-1) || '0');
+      setArithematicMethod(''); 
+    }else if(['+', '-', 'x', '/'].includes(currentResult.slice(-1))){
+  setCurrentResult(pre=>pre.slice(0,-1) + arithematicMethod);
     }else{
-      setCurrentResult(prev=> prev + arithematicMethod); 
-      setArithematicMethod('');
+      setCurrentResult(pre=>pre + arithematicMethod);
     }
-    
    },[arithematicMethod]);
 
   function calculateResult(){
@@ -83,7 +86,8 @@ export default function Home() {
         <Box>
           <Box sx={{bgcolor:'background.default', p:3}}>
             <Typography sx={{textAlign:'right',fontSize:'10px'}}>1250+45</Typography>
-          <Typography sx={{textAlign:'right',fontSize:'36px'}}>{currentResult}</Typography>
+          <Typography sx={{textAlign:'right',fontSize:'36px',whiteSpace:'nowrap',
+            overflowX:'auto',}}> {currentResult} </Typography>
           </Box>
            <Grid 
           container 
