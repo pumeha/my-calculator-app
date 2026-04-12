@@ -47,25 +47,16 @@ export default function Home() {
    },[arithematicMethod]);
 
   function calculateResult(){
-    let result = 0;
-    const num1 = parseFloat(currentResult);
-    const num2 = parseFloat(currentNumber);
-    switch (arithematicMethod) {
-      case '+':
-        result = num1 + num2;
-        break;
-      case '-':
-        result = num1 - num2;
-        break;
-      case 'x':
-        result = num1 * num2;
-        break;
-      case '/':
-        result = num1 / num2;
-        break;
-      default:
-        break;
-    }}
+    const value = currentResult.replace(/x/g, '*').replace(/%/g, '/100');
+    try {
+      const evalResult = eval(value);
+      setCurrentResult(String(evalResult));
+      
+    } catch (error) {
+      setCurrentResult('Error');
+    }
+    }
+
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
       <AppBar />
