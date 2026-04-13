@@ -12,6 +12,7 @@ export default function Home() {
   const [currentNumber, setCurrentNumber] = useState('');
   const [currentResult, setCurrentResult] = useState('0');
   const [arithematicMethod, setArithematicMethod] = useState('');
+  const [question, setQuestion] = useState('');
   const buttons = [
     'AC', 'c', '%', '/',
     '7', '8', '9', 'x',
@@ -26,6 +27,7 @@ export default function Home() {
     } else {
       setCurrentResult(prev => prev + currentNumber);
       setCurrentNumber('');
+      setArithematicMethod('');
     }
 
   }, [currentNumber]);
@@ -37,10 +39,12 @@ export default function Home() {
       setCurrentResult('0');
     } else if (arithematicMethod === 'AC') {
       setCurrentResult('0');
+      setQuestion('');
       setArithematicMethod('');
     } else if (arithematicMethod === 'c') {
       setCurrentResult(pre => pre.slice(0, -1) || '0');
       setArithematicMethod('');
+      setQuestion('');
     } else if (['+', '-', 'x', '/'].includes(currentResult.slice(-1))) {
       setCurrentResult(pre => pre.slice(0, -1) + arithematicMethod);
       //setArithematicMethod('');
@@ -52,7 +56,10 @@ export default function Home() {
   }, [arithematicMethod]);
 
   function calculateResult() {
-    const value = currentResult.replace(/x/g, '*').replace(/%/g, '/100');
+    const raw = ['+', '-', 'x', '/'].includes(currentResult.slice(-1)) ? currentResult.slice(0, -1) : currentResult;
+    const value = raw.replace(/x/g, '*').replace(/%/g, '/100');
+
+    setQuestion(raw+'='); 
     try {
       const evalResult = Number(parseFloat(eval(value).toFixed(6)));
       setCurrentResult(String(evalResult));
@@ -81,9 +88,9 @@ export default function Home() {
         <Card sx={{ maxWidth: 360, p: 0, boxShadow: 6 }}>
           <Box>
             <Box sx={{ bgcolor: 'background.default', p: 3 }}>
-              <Typography sx={{ textAlign: 'right', fontSize: '10px' }}>1250+45</Typography>
+              <Typography sx={{ textAlign: 'right', fontSize: '14px' }}>{question}</Typography>
               <Typography sx={{
-                textAlign: 'right', fontSize: '36px', whiteSpace: 'nowrap',
+                textAlign: 'right', fontSize: '24px', whiteSpace: 'nowrap',
                 overflowX: 'auto',
               }}> {currentResult} </Typography>
             </Box>
