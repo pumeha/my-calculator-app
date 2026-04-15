@@ -6,12 +6,11 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import AppBar from '../components/appBar';
 import { Card } from '@mui/material';
-import { useState, useEffect, use } from 'react';
+import { useState } from 'react';
+import { evaluate } from 'mathjs';
 
 export default function Home() {
-  const [currentNumber, setCurrentNumber] = useState('');
   const [currentResult, setCurrentResult] = useState('0');
-  const [arithematicMethod, setArithematicMethod] = useState('');
   const [question, setQuestion] = useState('');
   const buttons = [
     'AC', 'c', '%', '/',
@@ -19,51 +18,30 @@ export default function Home() {
     '4', '5', '6', '-',
     '1', '2', '3', '+'
   ];
-
-  useEffect(() => {
-    if (currentResult === '0') {
-      setCurrentResult(currentNumber);
-      setCurrentNumber('');
-    } else {
-      setCurrentResult(prev => prev + currentNumber);
-      setCurrentNumber('');
-      setArithematicMethod('');
-    }
-
-  }, [currentNumber]);
-
-  useEffect(() => {
-    if (currentResult === 'Error' || currentResult === 'Infinity' || currentResult === '-Infinity' || currentResult === 'NaN') {
-      setCurrentResult('0');
-    } else if (currentResult === '0' && arithematicMethod !== '.') {
-      setCurrentResult('0');
-    } else if (arithematicMethod === 'AC') {
+  const handleButtonClick = (num: string) => {
+    if (num === '=') {
+      calculateResult();
+    } else if (num === 'AC') {
       setCurrentResult('0');
       setQuestion('');
-      setArithematicMethod('');
-    } else if (arithematicMethod === 'c') {
+    } else if (num === 'c') {
       setCurrentResult(pre => pre.slice(0, -1) || '0');
-      setArithematicMethod('');
-      setQuestion('');
-    } else if (['+', '-', 'x', '/'].includes(currentResult.slice(-1))) {
-      setCurrentResult(pre => pre.slice(0, -1) + arithematicMethod);
-      //setArithematicMethod('');
+    } else if (['+', '-', 'x', '/'].includes(currentResult.slice(-1)) && !['.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '%'].includes(num)) {
+      setCurrentResult(pre => pre.slice(0, -1) + num);
     } else {
-      setCurrentResult(pre => pre + arithematicMethod);
-      //setArithematicMethod('');
+      setCurrentResult(prev => prev === '0' ? num : prev + num);
     }
-
-  }, [arithematicMethod]);
+  };
+  
 
   function calculateResult() {
     const raw = ['+', '-', 'x', '/'].includes(currentResult.slice(-1)) ? currentResult.slice(0, -1) : currentResult;
     const value = raw.replace(/x/g, '*').replace(/%/g, '/100');
 
-    setQuestion(raw+'='); 
     try {
-      const evalResult = Number(parseFloat(eval(value).toFixed(6)));
+      const evalResult = Number(parseFloat(evaluate(value).toFixed(6)));
       setCurrentResult(String(evalResult));
-      setArithematicMethod('');
+      setQuestion(raw + '=');
     } catch (error) {
       setCurrentResult('Error');
     }
@@ -100,19 +78,12 @@ export default function Home() {
               spacing={0.5}
               sx={{ maxWidth: 360, bgcolor: '#e0e0e0', padding: '4px' }}
             >
-              {buttons.map((num) => (
-                <Grid size={1} key={num}>
+              {[...buttons, '0', '.', '='].map((num) => (
+                <Grid size={num === '0' ? 2 : 1} key={num}>
                   <Button
                     variant="contained"
                     fullWidth
-                    onClick={() => {
-                      
-                      if (!isNaN(Number(num))) {
-                        setCurrentNumber(num);
-                      } else {
-                        setArithematicMethod(num);
-                      }
-                    }}
+                    onClick={() => handleButtonClick(num)}
                     sx={{
                       bgcolor: '#ffffff',
                       color: num === '+' || num === '-' || num === 'x' || num === '/' ? '#1976d2' : '#000000',
@@ -130,61 +101,7 @@ export default function Home() {
                 </Grid>
               ))}
             </Grid>
-            <Box sx={{ display: 'flex', flexDirection: 'row', bgcolor: '#e0e0e0', gap: 0.5, p: 0.3 }}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setCurrentNumber('0');
-                }}
 
-                sx={{
-                  bgcolor: '#ffffff',
-                  color: '#000000',
-                  height: 60,
-                  flex: 3,
-                  fontSize: '14px',
-                  boxShadow: 2,
-                  '&:hover': {
-                    bgcolor: '#e0e0e0',
-                  }, textAlign: 'left',
-                }}
-              >
-                0
-              </Button>
-              <Button
-                variant="contained"
-                onClick={() => setCurrentNumber('.')}
-                sx={{
-                  bgcolor: '#ffffff',
-                  color: '#000000',
-                  height: 60,
-                  flex: 1,
-                  fontSize: '14px',
-                  boxShadow: 2,
-                  '&:hover': {
-                    bgcolor: '#e0e0e0',
-                  },
-                }}
-              >
-                .
-              </Button>
-              <Button
-                variant="contained"
-                color='primary'
-                onClick={calculateResult}
-                sx={{
-                  height: 60,
-                  flex: 1,
-                  fontSize: '14px',
-                  boxShadow: 2,
-                  '&:hover': {
-                    bgcolor: '#e0e0e0',
-                  },
-                }}
-              >
-                =
-              </Button>
-            </Box>
           </Box>
         </Card>
       </Box>
